@@ -5,7 +5,7 @@
 # | |\  |  __/ |_) | |_| | | (_| |  _| |_| | | | ||  __/ |  | | | | (_| | |    \  / (_| | |_| | | |_ 
 # |_| \_|\___|_.__/ \__,_|_|\__,_| |_____|_| |_|\__\___|_|  |_| |_|\__,_|_|     \/ \__,_|\__,_|_|\__|
 #
-# Version 1.2
+# Version 2.0
 
 I = importlib
 
@@ -36,6 +36,7 @@ OPERATORS = [
     'e787ed5907742fa8d50b3ca2701ab8e03ec749ced806a15cdab800a127d7f863'
 ]
 
+# TODO: NEXT
 @export
 def fund_vault(emission_contract: str, total_emission_amount: float, total_stake_amount: float,
                minutes_till_start: int, start_period_in_minutes: int, minutes_till_end: int):
@@ -97,11 +98,11 @@ def stake(neb_amount: float):
     send_to_vault(NEB_CONTRACT, neb_amount)
     current_stake.set(current_stake.get() + neb_amount)
 
-    level = I.import_module(LP_VAULT).lock()
+    emission = I.import_module(LP_VAULT).lock()
 
-    max_stake = total_stake.get() / 100 * level['emission']
+    max_stake = total_stake.get() / 100 * emission
 
-    assert staking[ctx.caller] <= max_stake, f'Max stake exceeded: {max_stake} NEB (Level {level["level"]})'
+    assert staking[ctx.caller] <= max_stake, f'Max stake exceeded: {max_stake} NEB'
     assert current_stake.get() <= total_stake.get(), f'Max total stake exceeded: {total_stake.get()} NEB'
 
 @export
