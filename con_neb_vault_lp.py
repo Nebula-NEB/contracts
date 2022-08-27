@@ -32,27 +32,26 @@ def seed():
     con['key'] = 'con_neb_key001'
     con['dex'] = 'con_rocketswap_official_v1_1'
 
-    # TODO: Set real values for each level
     lvl = list()
 
-    lvl[1]  = {'key':  0, 'neb': decimal(10),  'lp': decimal(1),  'emission': decimal(0.1)}
-    lvl[2]  = {'key':  1, 'neb': decimal(20),  'lp': decimal(2),  'emission': decimal(0.5)}
-    lvl[3]  = {'key':  2, 'neb': decimal(30),  'lp': decimal(3),  'emission': decimal(1.0)}
-    lvl[4]  = {'key':  3, 'neb': decimal(40),  'lp': decimal(4),  'emission': decimal(1.5)}
-    lvl[5]  = {'key':  4, 'neb': decimal(50),  'lp': decimal(5),  'emission': decimal(2.0)}
-    lvl[6]  = {'key':  5, 'neb': decimal(60),  'lp': decimal(6),  'emission': decimal(2.5)}
-    lvl[7]  = {'key':  6, 'neb': decimal(70),  'lp': decimal(7),  'emission': decimal(3.0)}
-    lvl[8]  = {'key':  7, 'neb': decimal(80),  'lp': decimal(8),  'emission': decimal(3.5)}
-    lvl[9]  = {'key':  8, 'neb': decimal(90),  'lp': decimal(9),  'emission': decimal(4.0)}
-    lvl[10] = {'key':  9, 'neb': decimal(100), 'lp': decimal(10), 'emission': decimal(4.5)}
-    lvl[11] = {'key': 10, 'neb': decimal(110), 'lp': decimal(11), 'emission': decimal(5.0)}
-    lvl[12] = {'key': 11, 'neb': decimal(120), 'lp': decimal(12), 'emission': decimal(5.5)}
-    lvl[13] = {'key': 12, 'neb': decimal(130), 'lp': decimal(13), 'emission': decimal(6.0)}
-    lvl[14] = {'key': 13, 'neb': decimal(140), 'lp': decimal(14), 'emission': decimal(6.5)}
-    lvl[15] = {'key': 14, 'neb': decimal(150), 'lp': decimal(15), 'emission': decimal(7.0)}
-    lvl[16] = {'key': 15, 'neb': decimal(160), 'lp': decimal(16), 'emission': decimal(7.5)}
-    lvl[17] = {'key': 16, 'neb': decimal(170), 'lp': decimal(17), 'emission': decimal(8.0)}
-    lvl[18] = {'key': 17, 'neb': decimal(180), 'lp': decimal(18), 'emission': decimal(8.5)}
+    lvl.append({'key':  0, 'neb': 10.0,  'lp': 1.0,  'emission': 0.1})
+    lvl.append({'key':  1, 'neb': 20.0,  'lp': 2.0,  'emission': 0.5})
+    lvl.append({'key':  2, 'neb': 30.0,  'lp': 3.0,  'emission': 1.0})
+    lvl.append({'key':  3, 'neb': 40.0,  'lp': 4.0,  'emission': 1.5})
+    lvl.append({'key':  4, 'neb': 50.0,  'lp': 5.0,  'emission': 2.0})
+    lvl.append({'key':  5, 'neb': 60.0,  'lp': 6.0,  'emission': 2.5})
+    lvl.append({'key':  6, 'neb': 70.0,  'lp': 7.0,  'emission': 3.0})
+    lvl.append({'key':  7, 'neb': 80.0,  'lp': 8.0,  'emission': 3.5})
+    lvl.append({'key':  8, 'neb': 90.0,  'lp': 9.0,  'emission': 4.0})
+    lvl.append({'key':  9, 'neb': 100.0, 'lp': 10.0, 'emission': 4.5})
+    lvl.append({'key': 10, 'neb': 110.0, 'lp': 11.0, 'emission': 5.0})
+    lvl.append({'key': 11, 'neb': 120.0, 'lp': 12.0, 'emission': 5.5})
+    lvl.append({'key': 12, 'neb': 130.0, 'lp': 13.0, 'emission': 6.0})
+    lvl.append({'key': 13, 'neb': 140.0, 'lp': 14.0, 'emission': 6.5})
+    lvl.append({'key': 14, 'neb': 150.0, 'lp': 15.0, 'emission': 7.0})
+    lvl.append({'key': 15, 'neb': 160.0, 'lp': 16.0, 'emission': 7.5})
+    lvl.append({'key': 16, 'neb': 170.0, 'lp': 17.0, 'emission': 8.0})
+    lvl.append({'key': 17, 'neb': 180.0, 'lp': 18.0, 'emission': 8.5})
 
     levels.set(lvl)
 
@@ -60,7 +59,7 @@ def seed():
     active.set(True)
 
 @export
-def get_level(address: str):
+def get_level_index(address: str):
     key_stake = staking[address, 'key']
     neb_stake = staking[address, 'neb']
     lp_stake = staking[address, 'lp']
@@ -71,30 +70,31 @@ def get_level(address: str):
 
     lvl = levels.get()
 
-    for i in range(len(lvl), 0, -1):
+    for i in range(len(lvl) - 1, -1, -1):
         level = lvl[i]
 
         if not lp_level:
-            if level['lp'] >= lp_stake:
+            if level['lp'] <= lp_stake:
                 lp_level = i
 
         if not key_level:
-            if level['lp'] >= key_stake:
+            if level['key'] <= key_stake:
                 key_level = i
 
         if not neb_level:
-            if level['lp'] >= neb_stake:
+            if level['neb'] <= neb_stake:
                 neb_level = i
 
     return {'key': key_level, 'neb': neb_level, 'lp': lp_level}
 
 @export
-def get_emission(key_level: int, neb_level: int, lp_level: int)
-    return levels.get()[key_level + neb_level + lp_level]['emission']
+def show_level_index(address: str):
+    return str(get_level_index(address))
 
 @export
-def show_level(address: str):
-    return str(get_level(address))
+def get_emission(address: str):
+    lvl = get_level_index(address)
+    return levels.get()[lvl['key'] + lvl['neb'] + lvl['lp']]['emission']
 
 @export
 def stake(neb_amount: float = 0, lp_amount: float = 0, key_amount: int = 0):
@@ -218,8 +218,7 @@ def lock():
     locking[user_address, vault_contract, 'neb'] = staking[user_address, 'neb']
     locking[user_address, vault_contract, 'lp'] = staking[user_address, 'lp']
 
-    lvl = get_level(user_address)
-    return get_emission(lvl['key'], lvl['neb'], lvl['lp'])
+    return get_emission(user_address)
 
 @export
 def unlock():
@@ -246,10 +245,11 @@ def set_contract(key: str, value: str):
     con[key] = value
 
 @export
-def adjust_level(level: int, data: dict):
+def adjust_level(index: int, data: dict):
     assert_caller_is_owner()
     lvl = levels.get()
-    lvl[level] = data
+    lvl[index] = data
+    levels.set(lvl)
 
 @export
 def add_valid_vault(contract_name: str):
