@@ -36,7 +36,6 @@ OPERATORS = [
     'e787ed5907742fa8d50b3ca2701ab8e03ec749ced806a15cdab800a127d7f863'
 ]
 
-# TODO: NEXT
 @export
 def fund_vault(emission_contract: str, total_emission_amount: float, total_stake_amount: float,
                minutes_till_start: int, start_period_in_minutes: int, minutes_till_end: int):
