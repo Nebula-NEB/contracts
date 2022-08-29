@@ -34,6 +34,7 @@ def seed():
 
     lvl = list()
 
+    # TODO: Set real values
     lvl.append({'key':  0, 'neb': 10.0,  'lp': 1.0,  'emission': 0.1})
     lvl.append({'key':  1, 'neb': 20.0,  'lp': 2.0,  'emission': 0.5})
     lvl.append({'key':  2, 'neb': 30.0,  'lp': 3.0,  'emission': 1.0})
@@ -245,7 +246,7 @@ def set_contract(key: str, value: str):
     con[key] = value
 
 @export
-def adjust_level(index: int, data: dict):
+def set_level(index: int, data: dict):
     assert_caller_is_owner()
     lvl = levels.get()
     lvl[index] = data
